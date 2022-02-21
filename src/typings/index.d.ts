@@ -1,4 +1,3 @@
-import { Route, RouteProps } from 'react-router'
 export interface Picture {
   id: number
   name: string
@@ -18,20 +17,6 @@ export interface Region {
   children?: Region[]
 }
 
-export interface BuffRoute extends RouteProps {
-  name?: string
-  // 子路由
-  routes?: BuffRoute[]
-  // 路由所使用的组件
-  routeComponent?: typeof Route
-  redirect?: string
-}
-/**
- * 注入的路由配置
- */
-export interface BuffRouteProps {
-  routes: BuffRoute[]
-}
 /**
  * oss上传token
  */

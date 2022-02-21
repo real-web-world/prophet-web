@@ -1,38 +1,45 @@
+import Sidebar from '@/components/Sidebar'
 import Page404 from '@/pages/common/Page404'
-import { BuffRoute } from '@/typings'
-import Index, { Buff, User } from '@pages/Index'
-import pathMap from './pathMap'
-const routes = [
+import Index, { Fn, Prophet, Setting } from '@pages/Index'
+import { Outlet, RouteObject } from 'react-router-dom'
+import m from './pathMap'
+const routes: RouteObject[] = [
   {
-    name: '404',
-    path: pathMap[404],
-    element: Page404,
+    path: m[404],
+    element: <Page404 />,
   },
   {
-    name: '基础路由',
-    path: pathMap.index,
-    routes: [
+    path: m.index,
+    children: [
       {
-        name: '首页',
-        path: pathMap.index,
-        routes: [
+        path: m.index,
+        element: <Index />,
+        children: [
           {
-            name: '用户中心',
-            path: pathMap.user.index,
-            routes: [
+            path: m.index,
+            element: <Sidebar />,
+            children: [
               {
-                name: '用户中心-buff',
-                path: pathMap.user.buff,
-                routes: [],
-                element: <Buff />,
+                index: true,
+                element: <Prophet />,
+              },
+              {
+                path: m.prophet.index,
+                element: <Prophet />,
+              },
+              {
+                path: m.prophet.fn,
+                element: <Fn />,
+              },
+              {
+                path: m.prophet.setting,
+                element: <Setting />,
               },
             ],
-            element: <User />,
           },
         ],
-        element: <Index />,
       },
     ],
   },
-] as BuffRoute[]
+]
 export default routes

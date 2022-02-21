@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
-import '@sass/app.scss'
+import '@sass/global/app.scss'
 import { ConfigProvider } from 'antd'
 import zhCN from 'antd/es/locale/zh_CN'
 import 'moment/locale/zh-cn'

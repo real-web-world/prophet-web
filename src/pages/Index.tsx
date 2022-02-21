@@ -1,29 +1,38 @@
-import pathMap from '@/routes/pathMap'
-import { Link } from 'react-router-dom'
+import Header from '@/components/Header'
+import { gSass } from '@/utils/global'
+import { Outlet } from 'react-router-dom'
 
 interface Props {
   username: string
 }
+const style = gSass.index.index
 export default function Index(): React.ReactElement<Props> {
   return (
+    <div className={style.main}>
+      <Header />
+      <Outlet />
+    </div>
+  )
+}
+export function Setting(): React.ReactElement<Props> {
+  return (
     <>
-      <div>hello world</div>
-      <Link to={pathMap.user.index}>user index</Link>
-      <Link to={pathMap.user.buff}>user buff</Link>
+      <div>hello Setting</div>
     </>
   )
 }
-export function User(): React.ReactElement<Props> {
+export function Prophet(): React.ReactElement<Props> {
   return (
     <>
-      <div>hello User</div>
+      <div>hello Prophet</div>
+      <Outlet />
     </>
   )
 }
-export function Buff(): React.ReactElement<Props> {
+export function Fn(): React.ReactElement<Props> {
   return (
     <>
-      <div>hello Buff</div>
+      <div>hello Fn</div>
     </>
   )
 }

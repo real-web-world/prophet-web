@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { resolve } from 'path'
+import { createStyleImportPlugin, AntdResolve } from 'vite-plugin-style-import'
 // https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
@@ -18,12 +19,24 @@ export default defineConfig({
       '@locales': resolve(__dirname, './src/locales'),
     },
   },
-  plugins: [react()],
+  plugins: [react(), createStyleImportPlugin({ resolves: [AntdResolve()] })],
   build: {
     outDir: 'build',
   },
   server: {
     port: 3301,
     open: false,
+  },
+  css: {
+    modules: {
+      localsConvention: 'camelCase',
+      scopeBehaviour: 'local',
+      globalModulePaths: [/assets\/sass\/global\//],
+    },
+    preprocessorOptions: {
+      less: {
+        javascriptEnabled: true,
+      },
+    },
   },
 })

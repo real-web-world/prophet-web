@@ -19,7 +19,7 @@ export interface GetListParam<
   limit?: number
   filter?: Partial<Record<F, { condition: ConditionType; val: FilterVal }>>
   order?: Partial<Record<O, 'desc' | 'asc'>>
-  extra?: Partial<E> // 扩展用来放一些其他参数 比如withSubUsers:true,表示带上所有的子用户
+  extra?: Partial<E>
 }
 
 export async function getRegion() {
