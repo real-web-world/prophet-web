@@ -10,10 +10,9 @@ export default function Header(): React.ReactElement {
         style={{
           lineHeight: '66px',
           flex: 1,
+          paddingLeft: '15px',
           width: '160px',
           fontSize: '22px',
-          textAlign: 'center',
-          borderBottom: '1px solid black',
         }}
       >
         lol对局先知

@@ -1,7 +1,6 @@
-import Sidebar from '@/components/Sidebar'
 import Page404 from '@/pages/common/Page404'
-import Index, { Fn, Prophet, Setting } from '@pages/Index'
-import { Outlet, RouteObject } from 'react-router-dom'
+import Index from '@pages/Index'
+import { Outlet, RouteObject, Navigate } from 'react-router-dom'
 import m from './pathMap'
 const routes: RouteObject[] = [
   {
@@ -10,36 +9,11 @@ const routes: RouteObject[] = [
   },
   {
     path: m.index,
-    children: [
-      {
-        path: m.index,
-        element: <Index />,
-        children: [
-          {
-            path: m.index,
-            element: <Sidebar />,
-            children: [
-              {
-                index: true,
-                element: <Prophet />,
-              },
-              {
-                path: m.prophet.index,
-                element: <Prophet />,
-              },
-              {
-                path: m.prophet.fn,
-                element: <Fn />,
-              },
-              {
-                path: m.prophet.setting,
-                element: <Setting />,
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    element: <Index />,
+  },
+  {
+    path: '*',
+    element: <Navigate to={m[404]} />,
   },
 ]
 export default routes
