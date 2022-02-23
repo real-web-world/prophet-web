@@ -1,7 +1,6 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import _ from 'lodash'
 import { JsonReturnCode, ConditionType } from '@utils/constant'
-import { updateTokenExpire } from '@/services/api'
 import { localStoragePrefix } from '@/config/prod'
 export function delay(time: number) {
   return new Promise(s => setTimeout(s, time))
@@ -52,7 +51,6 @@ export async function rawReq<T = any>(param: AxiosRequestConfig): Promise<AxiosR
     axios
       .request<T>(param)
       .then(data => {
-        updateTokenExpire()
         s(data)
       })
       .catch(err => j(err))
@@ -78,7 +76,6 @@ export async function req<T = any>(param: AxiosRequestConfig): Promise<JsonRes<T
         if (code !== JsonReturnCode.success) {
           return j({ msg })
         }
-        updateTokenExpire()
         return s(json)
       })
       .catch(e => {

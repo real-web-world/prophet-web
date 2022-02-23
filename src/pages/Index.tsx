@@ -3,12 +3,32 @@ import { gSass } from '@/utils/global'
 import { Button, Checkbox, Input, InputNumber, Space, Switch, Tooltip } from 'antd'
 import { Outlet } from 'react-router-dom'
 import { QuestionCircleOutlined } from '@ant-design/icons'
+import { useEffect, useState } from 'react'
+import { Config, getAllConfig, updateConfig } from '@/services/lol'
 
 interface Props {
   username: string
 }
 const style = gSass.index.index
+const defaultCfg: Config = {
+  autoAcceptGame: false,
+  autoPickChampID: 0,
+  autoBanChampID: 0,
+  autoSendTeamHorse: true,
+  shouldSendSelfHorse: true,
+  horseNameConf: ['通天代', '小代', '上等马', '中等马', '下等马', '牛马'],
+  chooseSendHorseMsg: [true, true, true, true, true, true],
+  chooseChampSendMsgDelaySec: 3,
+  shouldInGameSaveMsgToClipBoard: true,
+}
 export default function Index(): React.ReactElement<Props> {
+  const [cfg, setCfg] = useState(defaultCfg)
+  useEffect(() => {
+    ;async () => {
+      const { data: config } = await getAllConfig()
+      setCfg(config)
+    }
+  })
   return (
     <div className={style.main}>
       <Header />
@@ -21,7 +41,15 @@ export default function Index(): React.ReactElement<Props> {
               <div className={style.title}>是否自动接受对局</div>
 
               <div className={style.switch}>
-                <Switch />
+                <Switch
+                  checked={cfg.autoAcceptGame}
+                  onChange={() => {
+                    const updatedCfg = { ...cfg }
+                    updatedCfg.autoAcceptGame = !updatedCfg.autoAcceptGame
+                    setCfg(updatedCfg)
+                    updateConfig(updatedCfg)
+                  }}
+                />
               </div>
             </div>
             <div className={style.item}>
@@ -39,13 +67,29 @@ export default function Index(): React.ReactElement<Props> {
             <div className={style.item}>
               <div className={style.title}>是否自动发送消息到选人界面</div>
               <div className={style.switch}>
-                <Switch />
+                <Switch
+                  checked={cfg.autoSendTeamHorse}
+                  onChange={() => {
+                    const updatedCfg = { ...cfg }
+                    updatedCfg.autoSendTeamHorse = !updatedCfg.autoSendTeamHorse
+                    setCfg(updatedCfg)
+                    updateConfig(updatedCfg)
+                  }}
+                />
               </div>
             </div>
             <div className={style.item}>
               <div className={style.title}>是否发送自己马匹信息</div>
               <div className={style.switch}>
-                <Switch />
+                <Switch
+                  checked={cfg.shouldSendSelfHorse}
+                  onChange={() => {
+                    const updatedCfg = { ...cfg }
+                    updatedCfg.shouldSendSelfHorse = !updatedCfg.shouldSendSelfHorse
+                    setCfg(updatedCfg)
+                    updateConfig(updatedCfg)
+                  }}
+                />
               </div>
             </div>
             <div className={style.item}>
@@ -58,7 +102,13 @@ export default function Index(): React.ReactElement<Props> {
                 </Tooltip>
               </div>
               <div className={style.switch}>
-                <Switch />
+                <Switch
+                  checked={cfg.autoAcceptGame}
+                  onChange={() => {
+                    cfg.autoAcceptGame = !cfg.autoAcceptGame
+                    setCfg(cfg)
+                  }}
+                />
               </div>
             </div>
             <div>
