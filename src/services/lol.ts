@@ -192,7 +192,7 @@ export function updateConfig(data: Config) {
 }
 export function querySummonerScore(name: string) {
   return bpost<HorseInfo>({
-    url: '/v1/config/update',
+    url: '/v1/horse/queryBySummonerName',
     data: {
       summonerName: name,
     },
