@@ -2,7 +2,7 @@ import Header from '@/components/Header'
 import { gSass } from '@/utils/global'
 import { Button, Checkbox, Input, InputNumber, message, Select, Space, Switch, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-yarnimport { useEffect, useLayoutEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 import _ from 'lodash'
 import { champions, Config, getAllConfig, querySummonerScore, updateConfig } from '@/services/lol'
 const { Option: SelectOption } = Select
@@ -66,8 +66,8 @@ export default function Index(): React.ReactElement<Props> {
       return
     }
     const a = async () => {
-      const { data } = await querySummonerScore(searchSummonerName)
-      message.info(`${searchSummonerName}马匹信息:${data.horse},得分:${data.score.toFixed(2)}`, 2)
+      const { data } = await querySummonerScore(searchSummonerNameA)
+      message.info(`${searchSummonerNameA}马匹信息:${data.horse},得分:${data.score.toFixed(2)}`, 3)
     }
     a().catch(console.error)
   }, [searchSummonerNameA])
@@ -369,8 +369,8 @@ export default function Index(): React.ReactElement<Props> {
                 <Button
                   type="primary"
                   onClick={() => {
-                    setSearchSummonerName('')
                     setSearchSummonerNameA(searchSummonerName)
+                    setSearchSummonerName('')
                   }}
                 >
                   查询
