@@ -2,7 +2,7 @@ import Header from '@/components/Header'
 import { gSass } from '@/utils/global'
 import { Button, Checkbox, Input, InputNumber, message, Select, Space, Switch, Tooltip } from 'antd'
 import { QuestionCircleOutlined } from '@ant-design/icons'
-import { useEffect, useState } from 'react'
+yarnimport { useEffect, useLayoutEffect, useState } from 'react'
 import _ from 'lodash'
 import { champions, Config, getAllConfig, querySummonerScore, updateConfig } from '@/services/lol'
 const { Option: SelectOption } = Select
@@ -22,9 +22,9 @@ const defaultCfg: Config = {
   shouldInGameSaveMsgToClipBoard: true,
 }
 const defaultHorseName = ['通天代', '小代', '上等马', '中等马', '下等马', '牛马']
+
 export default function Index(): React.ReactElement<Props> {
   const [searchSummonerName, setSearchSummonerName] = useState('')
-  const [searchSummonerNameA, setSearchSummonerNameA] = useState('')
   const [autoPickChampActive, setAutoPickChampActive] = useState(defaultCfg.autoPickChampID > 0)
   const [autoBanChampActive, setAutoBanChampActive] = useState(defaultCfg.autoBanChampID > 0)
   const [autoAcceptGame, setAutoAccetGame] = useState(defaultCfg.autoAcceptGame)
@@ -39,11 +39,14 @@ export default function Index(): React.ReactElement<Props> {
     defaultCfg.shouldInGameSaveMsgToClipBoard,
   )
   // api
-  const [chooseChampSendMsgDelaySecA, setChooseChampSendMsgDelaySecA] = useState(chooseChampSendMsgDelaySec)
-  const [horseNameConfA, setHorseNameConfA] = useState(horseNameConf)
-  const [chooseSendHorseMsgA, setChooseSendHorseMsgA] = useState(chooseSendHorseMsg)
+  // const [chooseChampSendMsgDelaySecA, setChooseChampSendMsgDelaySecA] = useState(chooseChampSendMsgDelaySec)
+  // const [horseNameConfA, setHorseNameConfA] = useState(horseNameConf)
+  // const [chooseSendHorseMsgA, setChooseSendHorseMsgA] = useState(chooseSendHorseMsg)
+  const [searchSummonerNameA, setSearchSummonerNameA] = useState('123')
+  const [shouldUpdateCfg, setShouldUpdateCfg] = useState(false)
+  const [hasInit, setHasInit] = useState(false)
 
-  const updateCfg = () => {
+  const updateCfg = async () => {
     const config: Config = {
       autoAcceptGame,
       autoPickChampID,
@@ -56,19 +59,20 @@ export default function Index(): React.ReactElement<Props> {
       shouldInGameSaveMsgToClipBoard,
     }
     console.log('正在更新配置')
-    updateConfig(config).then(() => {
-      console.log('更新配置成功')
-    })
+    return updateConfig(config)
   }
   useEffect(() => {
-    querySummonerScore(searchSummonerName)
-      .then(resp => {
-        message.info(`${searchSummonerName}马匹信息:${resp.data.horse},得分:${resp.data.score.toFixed(2)}`)
-      })
-      .catch(err => {})
+    if (!hasInit) {
+      return
+    }
+    const a = async () => {
+      const { data } = await querySummonerScore(searchSummonerName)
+      message.info(`${searchSummonerName}马匹信息:${data.horse},得分:${data.score.toFixed(2)}`, 2)
+    }
+    a().catch(console.error)
   }, [searchSummonerNameA])
   useEffect(() => {
-    ;async () => {
+    ;(async () => {
       const { data: config } = await getAllConfig()
       setAutoAccetGame(config.autoAcceptGame)
       setAutoPickChampID(config.autoPickChampID)
@@ -81,24 +85,17 @@ export default function Index(): React.ReactElement<Props> {
       setShouldInGameSaveMsgToClipBoard(config.shouldInGameSaveMsgToClipBoard)
       setAutoPickChampActive(config.autoPickChampID > 0)
       setAutoBanChampActive(config.autoBanChampID > 0)
-    }
+    })()
   }, [])
   useEffect(() => {
-    updateCfg()
-  }, [
-    autoAcceptGame,
-    autoPickChampID,
-    autoBanChampID,
-    autoSendTeamHorse,
-    shouldSendSelfHorse,
-    // horseNameConf,
-    // chooseSendHorseMsg,
-    // chooseChampSendMsgDelaySec,
-    shouldInGameSaveMsgToClipBoard,
-    horseNameConfA,
-    chooseSendHorseMsgA,
-    chooseChampSendMsgDelaySecA,
-  ])
+    if (!hasInit) {
+      setHasInit(true)
+      return
+    }
+    updateCfg().then(() => {
+      message.info('更新成功', 1)
+    })
+  }, [shouldUpdateCfg])
 
   return (
     <div className={style.main}>
@@ -116,6 +113,7 @@ export default function Index(): React.ReactElement<Props> {
                   checked={autoAcceptGame}
                   onChange={active => {
                     setAutoAccetGame(active)
+                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -129,6 +127,10 @@ export default function Index(): React.ReactElement<Props> {
                     setAutoPickChampActive(active)
                     if (!active) {
                       setAutoPickChampID(0)
+                      setShouldUpdateCfg(!shouldUpdateCfg)
+                    } else {
+                      setAutoPickChampID(157)
+                      setShouldUpdateCfg(!shouldUpdateCfg)
                     }
                   }}
                 />
@@ -140,11 +142,13 @@ export default function Index(): React.ReactElement<Props> {
                       optionFilterProp="label"
                       onChange={championID => {
                         setAutoPickChampID(championID)
+                        setShouldUpdateCfg(!shouldUpdateCfg)
                       }}
                       filterOption={(input, option) => {
                         return option?.label?.toString().includes(input) ?? false
                       }}
                       defaultValue={157}
+                      value={autoPickChampID}
                       options={champions.map(v => {
                         return { label: v.name, value: v.id }
                       })}
@@ -162,6 +166,10 @@ export default function Index(): React.ReactElement<Props> {
                     setAutoBanChampActive(active)
                     if (!active) {
                       setAutoBanChampID(0)
+                      setShouldUpdateCfg(!shouldUpdateCfg)
+                    } else {
+                      setAutoBanChampID(104)
+                      setShouldUpdateCfg(!shouldUpdateCfg)
                     }
                   }}
                 />
@@ -173,11 +181,13 @@ export default function Index(): React.ReactElement<Props> {
                       optionFilterProp="label"
                       onChange={championID => {
                         setAutoBanChampID(championID)
+                        setShouldUpdateCfg(!shouldUpdateCfg)
                       }}
                       filterOption={(input, option) => {
                         return option?.label?.toString().includes(input) ?? false
                       }}
                       defaultValue={157}
+                      value={autoBanChampID}
                       options={champions.map(v => {
                         return { label: v.name, value: v.id }
                       })}
@@ -193,6 +203,7 @@ export default function Index(): React.ReactElement<Props> {
                   checked={autoSendTeamHorse}
                   onChange={active => {
                     setAutoSendTeamHorse(active)
+                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -204,6 +215,7 @@ export default function Index(): React.ReactElement<Props> {
                   checked={shouldSendSelfHorse}
                   onChange={active => {
                     setShouldSendSelfHorse(active)
+                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -223,6 +235,7 @@ export default function Index(): React.ReactElement<Props> {
                   checked={shouldInGameSaveMsgToClipBoard}
                   onChange={active => {
                     setShouldInGameSaveMsgToClipBoard(active)
+                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -252,7 +265,7 @@ export default function Index(): React.ReactElement<Props> {
                   <Button
                     type="primary"
                     onClick={() => {
-                      setHorseNameConfA(horseNameConf)
+                      setShouldUpdateCfg(!shouldUpdateCfg)
                     }}
                   >
                     保存
@@ -285,7 +298,7 @@ export default function Index(): React.ReactElement<Props> {
                   <Button
                     type="primary"
                     onClick={() => {
-                      setChooseSendHorseMsgA(chooseSendHorseMsg)
+                      setShouldUpdateCfg(!shouldUpdateCfg)
                     }}
                   >
                     保存
@@ -310,7 +323,7 @@ export default function Index(): React.ReactElement<Props> {
                 <Button
                   type="primary"
                   onClick={() => {
-                    setChooseChampSendMsgDelaySecA(chooseChampSendMsgDelaySec)
+                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 >
                   保存
@@ -331,11 +344,9 @@ export default function Index(): React.ReactElement<Props> {
                   onClick={() => {
                     querySummonerScore('')
                       .then(resp => {
-                        message.info(`自己马匹信息:${resp.data.horse},得分:${resp.data.score.toFixed(2)}`)
+                        message.info(`自己马匹信息:${resp.data.horse},得分:${resp.data.score.toFixed(2)}`, 2)
                       })
-                      .catch(err => {
-                        // message.error('查询失败' + err)
-                      })
+                      .catch(console.error)
                   }}
                 >
                   查询
@@ -358,6 +369,7 @@ export default function Index(): React.ReactElement<Props> {
                 <Button
                   type="primary"
                   onClick={() => {
+                    setSearchSummonerName('')
                     setSearchSummonerNameA(searchSummonerName)
                   }}
                 >
