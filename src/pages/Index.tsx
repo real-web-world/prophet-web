@@ -10,18 +10,20 @@ interface Props {
   username: string
 }
 const style = gSass.index.index
+const defaultHorseName = ['通天代', '小代', '上等马', '中等马', '下等马', '牛马']
+
 const defaultCfg: Config = {
   autoAcceptGame: false,
   autoPickChampID: 0,
   autoBanChampID: 0,
   autoSendTeamHorse: true,
   shouldSendSelfHorse: true,
-  horseNameConf: ['通天代', '小代', '上等马', '中等马', '下等马', '牛马'],
+  horseNameConf: defaultHorseName,
   chooseSendHorseMsg: [true, true, true, true, true, true],
   chooseChampSendMsgDelaySec: 3,
   shouldInGameSaveMsgToClipBoard: true,
+  shouldAutoOpenBrowser: true,
 }
-const defaultHorseName = ['通天代', '小代', '上等马', '中等马', '下等马', '牛马']
 
 export default function Index(): React.ReactElement<Props> {
   const [searchSummonerName, setSearchSummonerName] = useState('')
@@ -38,11 +40,12 @@ export default function Index(): React.ReactElement<Props> {
   const [shouldInGameSaveMsgToClipBoard, setShouldInGameSaveMsgToClipBoard] = useState(
     defaultCfg.shouldInGameSaveMsgToClipBoard,
   )
+  const [shouldAutoOpenBrowser, setShouldAutoOpenBrowser] = useState(defaultCfg.shouldAutoOpenBrowser)
   // api
   // const [chooseChampSendMsgDelaySecA, setChooseChampSendMsgDelaySecA] = useState(chooseChampSendMsgDelaySec)
   // const [horseNameConfA, setHorseNameConfA] = useState(horseNameConf)
   // const [chooseSendHorseMsgA, setChooseSendHorseMsgA] = useState(chooseSendHorseMsg)
-  const [searchSummonerNameA, setSearchSummonerNameA] = useState('123')
+  const [searchSummonerNameA, setSearchSummonerNameA] = useState('')
   const [shouldUpdateCfg, setShouldUpdateCfg] = useState(false)
   const [hasInit, setHasInit] = useState(false)
 
@@ -57,6 +60,7 @@ export default function Index(): React.ReactElement<Props> {
       chooseSendHorseMsg,
       chooseChampSendMsgDelaySec,
       shouldInGameSaveMsgToClipBoard,
+      shouldAutoOpenBrowser,
     }
     console.log('正在更新配置')
     return updateConfig(config)
@@ -85,6 +89,7 @@ export default function Index(): React.ReactElement<Props> {
       setShouldInGameSaveMsgToClipBoard(config.shouldInGameSaveMsgToClipBoard)
       setAutoPickChampActive(config.autoPickChampID > 0)
       setAutoBanChampActive(config.autoBanChampID > 0)
+      setShouldAutoOpenBrowser(config.shouldAutoOpenBrowser ?? true)
     })()
   }, [])
   useEffect(() => {
@@ -150,7 +155,7 @@ export default function Index(): React.ReactElement<Props> {
                       defaultValue={157}
                       value={autoPickChampID}
                       options={champions.map(v => {
-                        return { label: v.name, value: v.id }
+                        return { label: v.name, value: v.id, nicks: v.nicks }
                       })}
                     ></Select>
                   </div>
@@ -236,6 +241,18 @@ export default function Index(): React.ReactElement<Props> {
                   onChange={active => {
                     setShouldInGameSaveMsgToClipBoard(active)
                     setShouldUpdateCfg(!shouldUpdateCfg)
+                  }}
+                />
+              </div>
+            </div>
+            <div className={style.item}>
+              <div className={style.title}>是否自动打开浏览器 </div>
+              <div className={style.switch}>
+                <Switch
+                  checked={shouldAutoOpenBrowser}
+                  onChange={active => {
+                    setShouldAutoOpenBrowser(active)
+                    setShouldUpdateCfg(!setShouldUpdateCfg)
                   }}
                 />
               </div>
