@@ -97,9 +97,13 @@ export default function Index(): React.ReactElement<Props> {
       setHasInit(true)
       return
     }
-    updateCfg().then(() => {
-      message.info('更新成功', 1)
-    })
+    updateCfg()
+      .then(() => {
+        message.info('更新成功', 1)
+      })
+      .catch(() => {
+        message.error('更新配置失败 请检查lol对局先知是否已启动', 3)
+      })
   }, [shouldUpdateCfg])
 
   return (
@@ -252,7 +256,7 @@ export default function Index(): React.ReactElement<Props> {
                   checked={shouldAutoOpenBrowser}
                   onChange={active => {
                     setShouldAutoOpenBrowser(active)
-                    setShouldUpdateCfg(!setShouldUpdateCfg)
+                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -363,7 +367,9 @@ export default function Index(): React.ReactElement<Props> {
                       .then(resp => {
                         message.info(`自己马匹信息:${resp.data.horse},得分:${resp.data.score.toFixed(2)}`, 2)
                       })
-                      .catch(console.error)
+                      .catch(() => {
+                        message.warn('查询失败,请检查lol客户端是否已启动', 3)
+                      })
                   }}
                 >
                   查询
