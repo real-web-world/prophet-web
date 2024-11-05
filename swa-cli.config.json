@@ -4,8 +4,8 @@
     "lol-buffge-com": {
       "appLocation": ".",
       "outputLocation": "dist",
-      "appBuildCommand": "yarn build",
-      "run": "yarn dev",
+      "appBuildCommand": "npm run build",
+      "run": "npm run dev",
       "appDevserverUrl": "http://localhost:5173"
     }
   }
