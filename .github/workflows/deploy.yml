@@ -48,8 +48,8 @@ jobs:
           export SUB_COMMIT_ID=$(echo "${{env.COMMIT_ID}}"|cut -c 1-8)
           s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/${SUB_COMMIT_ID}/
       - name: deploy
-        env:
-          SWA_CLI_DEPLOY_BINARY: /home/runner/.swa/deploy/53b7d0e07fe5c34bf68929fab92f87ce910288dc/StaticSitesClient
+        # env:
+          # SWA_CLI_DEPLOY_BINARY: /home/runner/.swa/deploy/53b7d0e07fe5c34bf68929fab92f87ce910288dc/StaticSitesClient
         run: |
           env
           npm run deploy
