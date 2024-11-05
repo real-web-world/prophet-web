@@ -22,10 +22,6 @@ jobs:
     steps:
       - name: 拉取代码
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
-      - name: setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
       - name: install deps
         run: yarn
       - name: add version file
