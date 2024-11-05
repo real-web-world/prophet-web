@@ -18,10 +18,12 @@ env:
 jobs:
   build_and_deploy_job:
     runs-on: arc-runner-set
-    name: 部署静态网站
+    name: deploy static website
     steps:
       - name: 拉取代码
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        with:
+          clean: false
       - name: install deps
         run: |
           npm config set registry https://registry.npmmirror.com
