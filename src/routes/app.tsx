@@ -1,7 +1,7 @@
-import Page404 from '@/pages/common/Page404'
-import Index from '@pages/Index'
-import { Outlet, RouteObject, Navigate } from 'react-router-dom'
-import m from './pathMap'
+import Page404 from "@/pages/common/Page404"
+import Index from "@pages/Index"
+import { type RouteObject, Navigate } from "react-router-dom"
+import m from "./pathMap"
 const routes: RouteObject[] = [
   {
     path: m[404],
@@ -12,7 +12,7 @@ const routes: RouteObject[] = [
     element: <Index />,
   },
   {
-    path: '*',
+    path: "*",
     element: <Navigate to={m[404]} />,
   },
 ]

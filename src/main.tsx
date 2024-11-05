@@ -1,20 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './App'
-import '@sass/global/app.scss'
-import { ConfigProvider } from 'antd'
-import zhCN from 'antd/es/locale/zh_CN'
-import 'moment/locale/zh-cn'
-import ErrorBoundary from './components/ErrorBoundary'
-import { init } from '@utils/fn'
+import { StrictMode } from "react"
+import { createRoot } from "react-dom/client"
+import App from "./App"
+import "@sass/global/app.scss"
+import { ErrorBoundary } from "react-error-boundary"
+import { init } from "@utils/fn"
+import { ConfigProvider } from "antd"
 init()
-ReactDOM.render(
-  <React.StrictMode>
-    <ErrorBoundary>
-      <ConfigProvider locale={zhCN}>
+createRoot(document.getElementById("root") as HTMLElement).render(
+  <StrictMode>
+    <ErrorBoundary fallback={<h1>网页加载失败, 请刷新重试</h1>}>
+      <ConfigProvider theme={{ cssVar: true }}>
         <App />
       </ConfigProvider>
     </ErrorBoundary>
-  </React.StrictMode>,
-  document.getElementById('root'),
+  </StrictMode>,
 )

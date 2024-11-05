@@ -1,4 +1,4 @@
 import localeName from '@utils/localeName'
 export default {
-  [localeName.app.公司名]: '远川',
+  [localeName.app.应用名]: 'lol对局先知',
 }

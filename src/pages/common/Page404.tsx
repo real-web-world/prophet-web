@@ -1,13 +1,10 @@
-import React, { Component } from 'react'
-import gSass from '@utils/sass'
-import gImg from '@utils/img'
-import { Button } from 'antd'
-import { Link } from 'react-router-dom'
-import pathMap from '@/routes/pathMap'
+import gSass from "@utils/sass"
+import { Button } from "antd"
+import { Link } from "react-router-dom"
+import pathMap from "@/routes/pathMap"
 const style = gSass.common.page404
-interface Props {}
 
-export default function Page404(): React.ReactElement<Props> {
+const Page404: React.FC = () => {
   return (
     <div className={style.main}>
       <div className={style.title}>404</div>
@@ -18,3 +15,4 @@ export default function Page404(): React.ReactElement<Props> {
     </div>
   )
 }
+export default Page404

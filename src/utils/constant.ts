@@ -46,9 +46,6 @@ export const conditionTypeZh = {
   [conditionType.notIn]: "不在数组中",
   [conditionType.neqString]: "不等于",
 }
-export const JsonReturnCode = {
-  success: 0x0,
-}
 
 // type
 export type ConditionType =

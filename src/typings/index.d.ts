@@ -3,31 +3,9 @@ export interface Picture {
   name: string
   url: string
 }
-export interface Action<T = any> {
+export interface Action<T = unknown> {
   type: string
   preload?: T
-}
-export type RegionLevel = 'province' | 'city' | 'county'
-export interface Region {
-  cid: string
-  value: string
-  label: string
-  areaName: string
-  level: RegionLevel
-  children?: Region[]
-}
-
-/**
- * oss上传token
- */
-export interface OssPolicyToken {
-  accessKeyID: string
-  host: string
-  expire: number
-  signature: string
-  policy: string
-  dir: string
-  callback: string
 }
 
 export interface DbBaseField {
