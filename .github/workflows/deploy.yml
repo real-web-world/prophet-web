@@ -23,7 +23,7 @@ jobs:
       - name: 拉取代码
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
       - name: install deps
-        run: yarn --verbose
+        run: bash -c yarn
       - name: add version file
         run: |
           cat > public/version.json <<EOF
@@ -39,6 +39,7 @@ jobs:
           yarn build
       - name: upload release
         run: |
+          sudo apt install libsecret-1-dev -y
           export SUB_COMMIT_ID=$(echo "${{env.COMMIT_ID}}"|cut -c 1-8)
           s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/${SUB_COMMIT_ID}/
       - name: deploy
