@@ -7,7 +7,7 @@ concurrency:
   group: lol.buffge.com
   cancel-in-progress: true
 env:
-  SWA_CLI_DEPLOYMENT_TOKEN:  ${{ secrets.SWA_CLI_DEPLOYMENT_TOKEN }}
+  SWA_CLI_DEPLOYMENT_TOKEN: ${{ secrets.SWA_CLI_DEPLOYMENT_TOKEN }}
   SWA_CLI_DEPLOY_ENV: Production
   DINGTALK_ACCESS_TOKEN: ${{ secrets.DINGTALK_ACCESS_TOKEN }}
   DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}
@@ -23,7 +23,10 @@ jobs:
       - name: 拉取代码
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
       - name: install deps
-        run: bash -c yarn
+        run: |
+          npm config set registry https://registry.npmmirror.com
+          npm i
+        shell: bash
       - name: add version file
         run: |
           cat > public/version.json <<EOF
@@ -36,16 +39,16 @@ jobs:
           EOF
       - name: build
         run: |
-          yarn build
+          npm run build
       - name: upload release
         run: |
           sudo apt install libsecret-1-dev -y
           export SUB_COMMIT_ID=$(echo "${{env.COMMIT_ID}}"|cut -c 1-8)
           s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/${SUB_COMMIT_ID}/
       - name: deploy
-        run: yarn deploy
         env:
           SWA_CLI_DEPLOY_BINARY: /home/runner/.swa/deploy/53b7d0e07fe5c34bf68929fab92f87ce910288dc/StaticSitesClient
+        run: npm run deploy
       - uses: buffge/dingtalk-action@34743c736212579f8ff99d2dca75879b56371796
         if: success()
         with:
