@@ -53,6 +53,7 @@ jobs:
         run: |
           env
           npm run deploy
+        shell: bash
       - uses: buffge/dingtalk-action@34743c736212579f8ff99d2dca75879b56371796
         if: success()
         with:
