@@ -40,7 +40,7 @@ jobs:
       - name: upload release
         run: |
           SUB_COMMIT_ID=echo $COMMIT_ID|cut -c 1-8
-          s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/${SUB_COMMIT_ID}/
+          s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/$SUB_COMMIT_ID/
       - name: deploy
         run: yarn deploy
       - uses: buffge/dingtalk-action@34743c736212579f8ff99d2dca75879b56371796
