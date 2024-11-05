@@ -49,7 +49,7 @@ jobs:
           msgtype: markdown
           title: "lol-web 成功"
           text: |
-              **<font color=#54aeff size=4>az-blog 构建成功</font>**
+              **<font color=#54aeff size=4>lol-web 构建成功</font>**
 
               **<font size=4>commitMsg: ${{ env.COMMIT_MSG }}</font>**
 
@@ -59,6 +59,6 @@ jobs:
           msgtype: markdown
           title: "lol-web 失败"
           text: |
-              **<font color=#cf222e size=4>az-blog 构建失败</font>**
+              **<font color=#cf222e size=4>lol-web 构建失败</font>**
 
               **<font size=4>commitMsg: ${{  env.COMMIT_MSG }}</font>**
