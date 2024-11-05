@@ -39,7 +39,7 @@ jobs:
           yarn build
       - name: upload release
         run: |
-          SUB_COMMIT_ID=echo $COMMIT_ID|cut -c 1-8
+          export SUB_COMMIT_ID=$(echo "${{env.COMMIT_ID}}"|cut -c 1-8)
           s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/${SUB_COMMIT_ID}/
       - name: deploy
         run: yarn deploy
