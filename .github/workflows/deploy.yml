@@ -50,7 +50,9 @@ jobs:
       - name: deploy
         env:
           SWA_CLI_DEPLOY_BINARY: /home/runner/.swa/deploy/53b7d0e07fe5c34bf68929fab92f87ce910288dc/StaticSitesClient
-        run: npm run deploy
+        run: |
+          env
+          npm run deploy
       - uses: buffge/dingtalk-action@34743c736212579f8ff99d2dca75879b56371796
         if: success()
         with:
