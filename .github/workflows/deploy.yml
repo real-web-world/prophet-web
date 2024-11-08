@@ -26,7 +26,6 @@ jobs:
           clean: false
       - name: install deps
         run: |
-          npm config set registry https://registry.npmmirror.com
           npm i
         shell: bash
       - name: add version file
@@ -44,7 +43,6 @@ jobs:
           npm run build
       - name: upload release
         run: |
-          sudo apt install libsecret-1-dev -y
           export SUB_COMMIT_ID=$(echo "${{env.COMMIT_ID}}"|cut -c 1-8)
           s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/${SUB_COMMIT_ID}/
       - name: deploy
