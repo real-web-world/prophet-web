@@ -41,7 +41,7 @@ export default defineConfig({
   VitePWA({
     injectRegister: 'inline',
     minify: true,
-    registerType: 'prompt',
+    registerType: 'autoUpdate',
     workbox: {
       globIgnores: ['**/staticwebapp.config.json'],
       globPatterns: ['**/*.{js,css,ico,png,svg,webp,jpg,html,json}'],
