@@ -1,0 +1,44 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+.flex {
+  display: flex;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.j-between {
+  justify-content: space-between;
+}
+
+.j-around {
+  justify-content: space-around;
+}
+
+.j-center {
+  justify-content: center;
+}
+
+.j-end {
+  justify-content: flex-end;
+}
+.a-center {
+  align-items: center;
+}
+.a-start {
+  align-items: flex-start;
+}
+
+.a-end {
+  align-items: flex-end;
+}
+
+.hidden {
+  display: none;
+}
+.cursor {
+  cursor: pointer;
+}

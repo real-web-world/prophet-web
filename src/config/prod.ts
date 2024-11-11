@@ -1,0 +1,10 @@
+export const baseUrl = 'http://127.0.0.1:4396'
+export const apiUrl = baseUrl
+export const withCredentials = false
+export const projectName = 'lol对局先知'
+export const routeBaseName = '/'
+export const localStoragePrefix = 'hh-lol-prophet'
+export const dlDoamin = "https://k-static.buffge.com:40012"
+export const bilibiliVideoUrl = "https://www.bilibili.com/video/BV1A34y117kh"
+export const projectGhUrl = "https://github.com/real-web-world/hh-lol-prophet"
+export const projectQQGroup = "102158075"

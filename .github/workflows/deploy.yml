@@ -1,0 +1,70 @@
+name: deploy
+on:
+  push:
+    branches:
+      - master
+concurrency:
+  group: lol.buffge.com
+  cancel-in-progress: true
+env:
+  SWA_CLI_DEPLOYMENT_TOKEN: ${{ secrets.SWA_CLI_DEPLOYMENT_TOKEN }}
+  SWA_CLI_DEPLOY_ENV: Production
+  DINGTALK_ACCESS_TOKEN: ${{ secrets.DINGTALK_ACCESS_TOKEN }}
+  DINGTALK_SECRET: ${{ secrets.DINGTALK_SECRET }}
+  COMMIT_ID: ${{ github.sha }}
+  COMMIT_USER: ${{github.actor}}
+  BUILD_TIME: $(date '+%Y-%m-%d_%H:%M:%S%Z')
+  COMMIT_MSG: ${{ github.event.head_commit.message}}
+jobs:
+  build_and_deploy_job:
+    runs-on: arc-runner-set
+    name: deploy static website
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332
+        with:
+          clean: false
+      - name: install deps
+        run: |
+          npm i
+        shell: bash
+      - name: add version file
+        run: |
+          cat > public/version.json <<EOF
+            {
+               "commitID": "${{ github.sha }}",
+               "commitUser": "${{ github.actor }}",
+               "buildTime": "$(date '+%Y-%m-%d_%H:%M:%S%Z')",
+               "commitMsg":"${{ github.event.head_commit.message}}"
+             }
+          EOF
+      - name: build
+        run: |
+          npm run build
+      - name: upload release
+        run: |
+          export SUB_COMMIT_ID=$(echo "${{env.COMMIT_ID}}"|cut -c 1-8)
+          s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/${SUB_COMMIT_ID}/
+          ###### End of Repository/Build Configurations ######
+      - name: deploy
+        run: |
+          yarn swa deploy "./dist" --deployment-token=${{secrets.SWA_CLI_DEPLOYMENT_TOKEN}}
+      - uses: buffge/dingtalk-action@34743c736212579f8ff99d2dca75879b56371796
+        if: success()
+        with:
+          msgtype: markdown
+          title: "lol-web 成功"
+          text: |
+              **<font color=#54aeff size=4>lol-web 构建成功</font>**
+
+              **<font size=4>commitMsg: ${{ env.COMMIT_MSG }}</font>**
+
+      - uses: buffge/dingtalk-action@34743c736212579f8ff99d2dca75879b56371796
+        if: failure()
+        with:
+          msgtype: markdown
+          title: "lol-web 失败"
+          text: |
+              **<font color=#cf222e size=4>lol-web 构建失败</font>**
+
+              **<font size=4>commitMsg: ${{  env.COMMIT_MSG }}</font>**
