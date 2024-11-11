@@ -5,6 +5,9 @@ import "@sass/global/app.scss"
 import { ErrorBoundary } from "react-error-boundary"
 import { init } from "@utils/fn"
 import { ConfigProvider } from "antd"
+import { registerSW } from "virtual:pwa-register"
+
+registerSW({ immediate: true })
 init()
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
