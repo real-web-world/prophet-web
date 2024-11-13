@@ -1,12 +1,9 @@
 import Header from "@/components/Header"
 import { gSass } from "@/utils/global"
-import { Button, Checkbox, Input, InputNumber, message, Select, Switch, Tooltip } from "antd"
+import { Button, Checkbox, Input, message, Select, Switch } from "antd"
 import { useEffect, useState } from "react"
 import { champions, type Config, getAllConfig, querySummonerScore, updateConfig } from "@/services/lol"
-interface Props {
-  username: string
-}
-const style = gSass.index.index
+const style = gSass.dev.client
 const defaultHorseName = ["通天代", "小代", "上等马", "中等马", "下等马", "牛马"]
 
 const defaultCfg: Config = {
@@ -17,12 +14,12 @@ const defaultCfg: Config = {
   shouldSendSelfHorse: true,
   horseNameConf: defaultHorseName,
   chooseSendHorseMsg: [true, true, true, true, true, true],
-  chooseChampSendMsgDelaySec: 3,
-  shouldInGameSaveMsgToClipBoard: true,
   shouldAutoOpenBrowser: true,
 }
 
-export default function DevClient(): React.ReactElement<Props> {
+const DevClient: React.FC = () => {
+  const [messageApi, contextHolder] = message.useMessage()
+  const [hasInit, setHasInit] = useState(false)
   const [searchSummonerName, setSearchSummonerName] = useState("")
   const [autoPickChampActive, setAutoPickChampActive] = useState(defaultCfg.autoPickChampID > 0)
   const [autoBanChampActive, setAutoBanChampActive] = useState(defaultCfg.autoBanChampID > 0)
@@ -33,14 +30,7 @@ export default function DevClient(): React.ReactElement<Props> {
   const [shouldSendSelfHorse, setShouldSendSelfHorse] = useState(defaultCfg.shouldSendSelfHorse)
   const [chooseSendHorseMsg, setChooseSendHorseMsg] = useState(defaultCfg.chooseSendHorseMsg)
   const [horseNameConf, setHorseNameConf] = useState(defaultCfg.horseNameConf)
-  const [chooseChampSendMsgDelaySec, setChooseChampSendMsgDelaySec] = useState(defaultCfg.chooseChampSendMsgDelaySec)
-  const [shouldInGameSaveMsgToClipBoard, setShouldInGameSaveMsgToClipBoard] = useState(
-    defaultCfg.shouldInGameSaveMsgToClipBoard,
-  )
   const [shouldAutoOpenBrowser, setShouldAutoOpenBrowser] = useState(defaultCfg.shouldAutoOpenBrowser)
-  const [searchSummonerNameA, setSearchSummonerNameA] = useState("")
-  const [shouldUpdateCfg, setShouldUpdateCfg] = useState(false)
-  const [hasInit, setHasInit] = useState(false)
 
   const updateCfg = async () => {
     const config: Config = {
@@ -51,28 +41,20 @@ export default function DevClient(): React.ReactElement<Props> {
       shouldSendSelfHorse,
       horseNameConf,
       chooseSendHorseMsg,
-      chooseChampSendMsgDelaySec,
-      shouldInGameSaveMsgToClipBoard,
+      // shouldInGameSaveMsgToClipBoard,
       shouldAutoOpenBrowser,
     }
     console.log("正在更新配置")
-    return updateConfig(config)
-  }
-  if (hasInit) {
-    setHasInit(true)
-    updateCfg()
+    updateConfig(config)
+      .then(() => {
+        messageApi.info("更新成功", 1)
+      })
+      .catch(() => {
+        messageApi.error("更新配置失败 请检查lol对局先知是否已启动", 3)
+      })
   }
   useEffect(() => {
-    if (!hasInit) {
-      return
-    }
-    const a = async () => {
-      const { data } = await querySummonerScore(searchSummonerNameA)
-      message.info(`${searchSummonerNameA}马匹信息:${data.horse},得分:${data.score.toFixed(2)}`, 3)
-    }
-    a().catch(console.error)
-  }, [searchSummonerNameA, hasInit])
-  useEffect(() => {
+    console.log("66 正在初始化")
     ;(async () => {
       const { data: config } = await getAllConfig()
       setAutoAccetGame(config.autoAcceptGame)
@@ -80,45 +62,36 @@ export default function DevClient(): React.ReactElement<Props> {
       setAutoBanChampID(config.autoBanChampID)
       setAutoSendTeamHorse(config.autoSendTeamHorse)
       setShouldSendSelfHorse(config.shouldSendSelfHorse)
+      setShouldAutoOpenBrowser(config.shouldAutoOpenBrowser)
       setHorseNameConf(config.horseNameConf)
       setChooseSendHorseMsg(config.chooseSendHorseMsg)
-      setChooseChampSendMsgDelaySec(config.chooseChampSendMsgDelaySec)
-      setShouldInGameSaveMsgToClipBoard(config.shouldInGameSaveMsgToClipBoard)
       setAutoPickChampActive(config.autoPickChampID > 0)
       setAutoBanChampActive(config.autoBanChampID > 0)
-      setShouldAutoOpenBrowser(config.shouldAutoOpenBrowser ?? true)
+      setHasInit(true)
     })()
   }, [])
   useEffect(() => {
-    if (!shouldUpdateCfg) {
+    if (!hasInit) {
       return
     }
-    // updateCfg()
-    //   .then(() => {
-    //     message.info("更新成功", 1)
-    //   })
-    //   .catch(() => {
-    //     message.error("更新配置失败 请检查lol对局先知是否已启动", 3)
-    //   })
-  }, [shouldUpdateCfg])
-
+    updateCfg()
+  }, [autoAcceptGame, autoPickChampID, autoBanChampID, autoSendTeamHorse, shouldSendSelfHorse, shouldAutoOpenBrowser])
   return (
     <div className={style.main}>
+      {contextHolder}
       <Header />
       {/* 配置 */}
       <div className={style.content}>
         <div className={style.trem}>
-          <div className={style.them}>配置选项2</div>
+          <div className={style.them}>配置选项</div>
           <div className={style.list}>
             <div className={style.item}>
               <div className={style.title}>是否自动接受对局</div>
-
               <div className={style.switch}>
                 <Switch
                   checked={autoAcceptGame}
                   onChange={active => {
                     setAutoAccetGame(active)
-                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -130,27 +103,46 @@ export default function DevClient(): React.ReactElement<Props> {
                   checked={autoPickChampActive}
                   onChange={active => {
                     setAutoPickChampActive(active)
-                    if (!active) {
-                      setAutoPickChampID(0)
-                      setShouldUpdateCfg(!shouldUpdateCfg)
-                    } else {
-                      setAutoPickChampID(157)
-                      setShouldUpdateCfg(!shouldUpdateCfg)
-                    }
+                    setAutoPickChampID(active ? 157 : 0)
                   }}
                 />
                 {autoPickChampActive ? (
-                  <div style={{}}>
-                    <Select<number>
+                  <div
+                    style={{
+                      marginLeft: 15,
+                    }}
+                  >
+                    <Select<
+                      number,
+                      {
+                        label: string
+                        value: number
+                        nicks: string[]
+                      }
+                    >
                       showSearch
                       placeholder="选择英雄"
                       optionFilterProp="label"
+                      style={{
+                        width: 150,
+                        textAlign: "center",
+                      }}
                       onChange={championID => {
                         setAutoPickChampID(championID)
-                        setShouldUpdateCfg(!shouldUpdateCfg)
                       }}
                       filterOption={(input, option) => {
-                        return option?.label?.toString().includes(input) ?? false
+                        if (!option) {
+                          return false
+                        }
+                        if (option.label.includes(input)) {
+                          return true
+                        }
+                        for (const v of option.nicks) {
+                          if (v.includes(input)) {
+                            return true
+                          }
+                        }
+                        return false
                       }}
                       defaultValue={157}
                       value={autoPickChampID}
@@ -169,32 +161,51 @@ export default function DevClient(): React.ReactElement<Props> {
                   checked={autoBanChampActive}
                   onChange={active => {
                     setAutoBanChampActive(active)
-                    if (!active) {
-                      setAutoBanChampID(0)
-                      setShouldUpdateCfg(!shouldUpdateCfg)
-                    } else {
-                      setAutoBanChampID(104)
-                      setShouldUpdateCfg(!shouldUpdateCfg)
-                    }
+                    setAutoBanChampID(active ? 104 : 0)
                   }}
                 />
                 {autoBanChampActive ? (
-                  <div style={{}}>
-                    <Select<number>
+                  <div
+                    style={{
+                      marginLeft: 15,
+                    }}
+                  >
+                    <Select<
+                      number,
+                      {
+                        label: string
+                        value: number
+                        nicks: string[]
+                      }
+                    >
+                      style={{
+                        width: 150,
+                        textAlign: "center",
+                      }}
                       showSearch
                       placeholder="选择英雄"
                       optionFilterProp="label"
                       onChange={championID => {
                         setAutoBanChampID(championID)
-                        setShouldUpdateCfg(!shouldUpdateCfg)
                       }}
                       filterOption={(input, option) => {
-                        return option?.label?.toString().includes(input) ?? false
+                        if (!option) {
+                          return false
+                        }
+                        if (option.label.includes(input)) {
+                          return true
+                        }
+                        for (const v of option.nicks) {
+                          if (v.includes(input)) {
+                            return true
+                          }
+                        }
+                        return false
                       }}
                       defaultValue={157}
                       value={autoBanChampID}
                       options={champions.map(v => {
-                        return { label: v.name, value: v.id }
+                        return { label: v.name, value: v.id, nicks: v.nicks }
                       })}
                     />
                   </div>
@@ -208,7 +219,6 @@ export default function DevClient(): React.ReactElement<Props> {
                   checked={autoSendTeamHorse}
                   onChange={active => {
                     setAutoSendTeamHorse(active)
-                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -220,27 +230,6 @@ export default function DevClient(): React.ReactElement<Props> {
                   checked={shouldSendSelfHorse}
                   onChange={active => {
                     setShouldSendSelfHorse(active)
-                    setShouldUpdateCfg(!shouldUpdateCfg)
-                  }}
-                />
-              </div>
-            </div>
-            <div className={style.item}>
-              <div className={style.title}>
-                是否复制敌方马匹信息{" "}
-                <Tooltip title="待更新">
-                  {/* <Space>
-                    <QuestionCircleOutlined style={{ color: '#1890ff' }} />
-                  </Space> */}
-                  ?
-                </Tooltip>
-              </div>
-              <div className={style.switch}>
-                <Switch
-                  checked={shouldInGameSaveMsgToClipBoard}
-                  onChange={active => {
-                    setShouldInGameSaveMsgToClipBoard(active)
-                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -252,7 +241,6 @@ export default function DevClient(): React.ReactElement<Props> {
                   checked={shouldAutoOpenBrowser}
                   onChange={active => {
                     setShouldAutoOpenBrowser(active)
-                    setShouldUpdateCfg(!shouldUpdateCfg)
                   }}
                 />
               </div>
@@ -264,6 +252,7 @@ export default function DevClient(): React.ReactElement<Props> {
                   return (
                     <div key={v} className={style.inputItem}>
                       <Input
+                        name={`horse-${k}`}
                         placeholder={defaultHorseName[k]}
                         value={v}
                         onChange={evt => {
@@ -279,12 +268,7 @@ export default function DevClient(): React.ReactElement<Props> {
                   )
                 })}
                 <div className={style.inputItem}>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      setShouldUpdateCfg(!shouldUpdateCfg)
-                    }}
-                  >
+                  <Button type="primary" onClick={updateCfg}>
                     保存
                   </Button>
                 </div>
@@ -306,45 +290,17 @@ export default function DevClient(): React.ReactElement<Props> {
                     .map(v => v.k)}
                   options={horseNameConf.map((v, k) => {
                     return {
+                      id: v,
                       label: v,
                       value: k,
                     }
                   })}
                 />
                 <div className={style.messageBtn}>
-                  <Button
-                    type="primary"
-                    onClick={() => {
-                      setShouldUpdateCfg(!shouldUpdateCfg)
-                    }}
-                  >
+                  <Button type="primary" onClick={updateCfg}>
                     保存
                   </Button>
                 </div>
-              </div>
-            </div>
-            <div className={style.time}>
-              <div className={style.title}>进入选人阶段n秒</div>
-              <div className={style.inputNumber}>
-                <InputNumber
-                  defaultValue={3}
-                  min={0}
-                  max={20}
-                  value={chooseChampSendMsgDelaySec}
-                  onChange={val => {
-                    val && setChooseChampSendMsgDelaySec(val)
-                  }}
-                />
-              </div>
-              <div className={style.messageBtn}>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    setShouldUpdateCfg(!shouldUpdateCfg)
-                  }}
-                >
-                  保存
-                </Button>
               </div>
             </div>
           </div>
@@ -361,10 +317,10 @@ export default function DevClient(): React.ReactElement<Props> {
                   onClick={() => {
                     querySummonerScore("")
                       .then(resp => {
-                        message.info(`自己马匹信息:${resp.data.horse},得分:${resp.data.score.toFixed(2)}`, 2)
+                        messageApi.info(`自己马匹信息:${resp.data.horse},得分:${resp.data.score.toFixed(2)}`, 2)
                       })
                       .catch(() => {
-                        message.warning("查询失败,请检查lol客户端是否已启动", 3)
+                        messageApi.warning("查询失败,请检查lol客户端是否已启动", 3)
                       })
                   }}
                 >
@@ -376,7 +332,8 @@ export default function DevClient(): React.ReactElement<Props> {
               <div className={style.btnTitle}>查询用户马匹信息</div>
               <div className={style.btnInput}>
                 <Input
-                  placeholder="用户名"
+                  name="searchSummonerName"
+                  placeholder="用户名#数字"
                   value={searchSummonerName}
                   onChange={evt => {
                     const name = evt.currentTarget.value.trim()
@@ -387,9 +344,20 @@ export default function DevClient(): React.ReactElement<Props> {
               <div className={style.btn}>
                 <Button
                   type="primary"
-                  onClick={() => {
-                    setSearchSummonerNameA(searchSummonerName)
+                  onClick={async () => {
+                    if (!/[^#]+?#\d{5,}/.test(searchSummonerName)) {
+                      messageApi.warning("请输入要查询的用户名信息 例如 Uzi#439677")
+                      return
+                    }
                     setSearchSummonerName("")
+                    querySummonerScore(searchSummonerName)
+                      .then(resp => {
+                        const { data } = resp
+                        messageApi.info(`${searchSummonerName} 马匹信息:${data.horse},得分:${data.score.toFixed(2)}`, 3)
+                      })
+                      .catch(e => {
+                        messageApi.warning(e.msg)
+                      })
                   }}
                 >
                   查询
@@ -414,18 +382,4 @@ export default function DevClient(): React.ReactElement<Props> {
     </div>
   )
 }
-// 配置选项
-// - 是否自动接受对局 false
-// - 是否自动秒选英雄 false
-// - 是否自动ban人
-// - 是否自动发送消息到选人界面 true
-// - 是否发送自己马匹信息 true
-// - 进入游戏后获取对方马匹信息 并保存在剪切板中 true
-// - 马匹名称 自定义 6input
-// - 发送哪些马匹信息 (比如仅发送上等马小代和通天代) 6 checkbox
-// - 进入选人阶段n秒 再发送  1 input
-// 功能
-//   查询自己马匹信息
-//   查询用户马匹信息
-//   复制马匹信息到剪切板
-//   发送马匹信息(选人阶段)
+export default DevClient

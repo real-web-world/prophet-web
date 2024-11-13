@@ -1,0 +1,105 @@
+.main {
+  width: 1000px;
+  max-height: 650px;
+  margin: 0 auto;
+  height: 100vh;
+  background: #f5f5f5;
+}
+
+.content {
+  padding: 20px;
+}
+
+.trem {
+  margin-bottom: 15px;
+  margin-bottom: 15px;
+}
+
+.them {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.list {
+  margin-left: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.item {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  min-height: 32px;
+}
+
+.title {
+  font-size: 14px;
+  width: 48%;
+}
+
+.switch {
+  margin-left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.inputList {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  margin-left: 8px;
+  margin-bottom: 8px;
+}
+
+.inputItem {
+  margin-right: 8px;
+}
+
+.input {
+  width: 30%;
+  margin-bottom: 8px;
+}
+
+.message {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.messageList {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  margin-left: 8px;
+}
+
+.messageBtn {
+  margin-left: 15px;
+}
+
+.time {
+  display: flex;
+  align-items: center;
+}
+
+.inputNumber {
+  margin-left: 15px;
+}
+
+.btnItem {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.btnTitle {
+  margin-right: 15px;
+}
+
+.btnInput {
+  margin-right: 15px;
+}

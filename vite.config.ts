@@ -44,7 +44,7 @@ export default defineConfig({
     registerType: 'autoUpdate',
     workbox: {
       globIgnores: ['**/staticwebapp.config.json'],
-      globPatterns: ['**/*.{js,css,ico,png,svg,webp,jpg,html,json}'],
+      globPatterns: ['**/*.{js,css,ico,png,svg,webp,jpg,html,json,webmanifest}'],
       skipWaiting: true,
       modifyURLPrefix: {
         "index.html": "/index.html",

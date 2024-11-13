@@ -37,7 +37,7 @@ export interface JsonRes<T = unknown, D = any> {
   msg?: string
   extra?: JsonResExtra<D>
 }
-export async function rawReq<T = any>(param: AxiosRequestConfig): Promise<AxiosResponse<T>> {
+export async function rawReq<T = unknown>(param: AxiosRequestConfig): Promise<AxiosResponse<T>> {
   param.headers = param.headers || {}
   if (LocalStorage.has('token')) {
     param.headers.token = LocalStorage.get('token')
@@ -51,9 +51,9 @@ export async function rawReq<T = any>(param: AxiosRequestConfig): Promise<AxiosR
       .catch(err => j(err))
   })
 }
-export async function req<T = any>(param: AxiosRequestConfig): Promise<JsonRes<T>> {
+export async function req<T = unknown>(param: AxiosRequestConfig): Promise<JsonRes<T>> {
   return new Promise((s, j) => {
-    const headers: any = {}
+    const headers: AxiosRequestConfig['headers'] = {}
     if (LocalStorage.has('token')) {
       headers.token = LocalStorage.get('token')
     }
@@ -77,14 +77,13 @@ export async function req<T = any>(param: AxiosRequestConfig): Promise<JsonRes<T
         if (e?.response?.data?.code !== undefined && e?.response?.data?.msg) {
           j({ msg: e.response.data.msg })
         } else {
-          console.log(e, e.code, e.msg)
           j({ msg: `网络请求失败,错误信息: ${e}`, data: e })
         }
       })
   })
 }
 
-export async function bget<T = any>(param: { url: string; param?: Record<string, any> }) {
+export async function bget<T = unknown>(param: { url: string; param?: Record<string, any> }) {
   const { url, param: params } = param
   return req<T>({
     method: 'GET',
@@ -93,7 +92,7 @@ export async function bget<T = any>(param: { url: string; param?: Record<string,
   })
 }
 
-export async function bpost<T = any>(param: AxiosRequestConfig) {
+export async function bpost<T = unknown>(param: AxiosRequestConfig) {
   param.method = 'POST'
   return req<T>(param)
 }

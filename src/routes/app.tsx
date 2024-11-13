@@ -10,7 +10,7 @@ const routes: RouteObject[] = [
   },
   {
     path: m.index,
-    element: <Index version="v0.2.4" />,
+    element: <Index version="v0.2.5" />,
   },
   {
     path: m.dev.client,

@@ -16,5 +16,6 @@ createRoot(document.getElementById("root") as HTMLElement).render(
         <App />
       </ConfigProvider>
     </ErrorBoundary>
+    ,
   </StrictMode>,
 )

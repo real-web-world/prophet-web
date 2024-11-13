@@ -158,6 +158,7 @@ export const champions = [
   { id: 555, name: '血港鬼影', nicks: ['派克'] },
   { id: 711, name: '愁云使者', nicks: ['薇古丝'] },
   { id: 777, name: '封魔剑魂', nicks: ['永恩'] },
+  { id: 799, name: '铁血狼母', nicks: ['安蓓萨'] },
   { id: 875, name: '腕豪', nicks: ['劲夫'] },
   { id: 876, name: '含羞蓓蕾', nicks: ['莉莉娅'] },
   { id: 887, name: '灵罗娃娃', nicks: ['格温'] },
@@ -177,11 +178,11 @@ export interface Config {
   autoBanChampID: number
   autoSendTeamHorse: boolean
   shouldSendSelfHorse: boolean
+  shouldAutoOpenBrowser: boolean
   horseNameConf: string[]
   chooseSendHorseMsg: boolean[]
-  chooseChampSendMsgDelaySec: number
-  shouldInGameSaveMsgToClipBoard: boolean
-  shouldAutoOpenBrowser: boolean
+  chooseChampSendMsgDelaySec?: number
+
 }
 export interface HorseInfo {
   horse: string
@@ -189,15 +190,12 @@ export interface HorseInfo {
   currKDA: string[]
 }
 export function getAllConfig() {
-  return bpost<
-    Config & {
-      shouldAutoOpenBrowser?: boolean
-    }
-  >({
+  return bpost<Config>({
     url: '/v1/config/getAll',
   })
 }
 export function updateConfig(data: Config) {
+  data.chooseChampSendMsgDelaySec = 3
   return bpost({
     url: '/v1/config/update',
     data,

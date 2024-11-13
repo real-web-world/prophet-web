@@ -1,6 +1,6 @@
 import { bilibiliVideoUrl, projectGhUrl, dlDoamin, projectQQGroup } from "@/config/prod"
-import { Link } from "react-router-dom"
-import m from "@routes/pathMap"
+// import { Link } from "react-router-dom"
+// import m from "@routes/pathMap"
 interface Props {
   version: string
 }
@@ -15,9 +15,9 @@ const Index: React.FC<Props> = ({ version }) => {
         <source src="//game.gtimg.cn/images/lol/act/a20220124prespring/video.mp4" type="video/mp4" />
       </video>
       <div className="summary">
-        <h1>lol 对局先知-v2</h1>
+        <h1>lol 对局先知</h1>
         <h2>qq 群:{projectQQGroup}</h2>
-        <Link to={m.dev.client}>client</Link>
+        {/* <Link to={m.dev.client}>client</Link> */}
         <h2>
           b站:{" "}
           <a href={bilibiliVideoUrl} target="_blank" rel="noreferrer">
