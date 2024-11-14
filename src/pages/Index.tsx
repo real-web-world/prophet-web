@@ -1,13 +1,15 @@
 import { bilibiliVideoUrl, projectGhUrl, projectQQGroup, defaultVersionTag, defaultDlUrl } from "@/config/prod"
 import { getCurrVersion } from "@/services/lol"
 import { useEffect, useState } from "react"
-// import { Link } from "react-router-dom"
-// import m from "@routes/pathMap"
+import { Link } from "react-router-dom"
+import m from "@routes/pathMap"
 import { faro } from "@grafana/faro-web-sdk"
 interface Props {
   version: string
 }
-
+const onDownloadApp = () => {
+  faro.api.pushEvent("下载app", {})
+}
 const Index: React.FC<Props> = () => {
   const [versionTag, setVersionTag] = useState(defaultVersionTag)
   const [dlUrl, setDlUrl] = useState(defaultDlUrl)
@@ -32,27 +34,55 @@ const Index: React.FC<Props> = () => {
       <div className="summary">
         <h1>lol 对局先知</h1>
         <h2>qq 群:{projectQQGroup}</h2>
-        {/* <Link to={m.dev.client}>client</Link> */}
+        <Link to={m.dev.client}>client</Link>
         <h2>
           b站:{" "}
-          <a href={bilibiliVideoUrl} target="_blank" rel="noreferrer">
+          <a
+            href={bilibiliVideoUrl}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              faro.api.pushEvent("访问b站")
+            }}
+          >
             传说的buff
           </a>
         </h2>
         <h2>
           源码:{" "}
-          <a href={projectGhUrl} target="_blank" rel="noreferrer">
+          <a
+            href={projectGhUrl}
+            target="_blank"
+            rel="noreferrer"
+            onClick={() => {
+              faro.api.pushEvent("访问github项目")
+            }}
+          >
             github
           </a>
         </h2>
         <div>
-          <a className="dl" href={dlUrl} download={maServerDlName}>
+          <a
+            className="dl"
+            href={dlUrl}
+            download={maServerDlName}
+            onClick={() => {
+              faro.api.pushEvent("下载app")
+            }}
+          >
             {" "}
             下载软件{" "}
           </a>
           <br />
           <br />
-          <a className="dl" href={dlUrl} download={twServerDlName}>
+          <a
+            className="dl"
+            href={dlUrl}
+            download={twServerDlName}
+            onClick={() => {
+              faro.api.pushEvent("下载台服app")
+            }}
+          >
             {" "}
             下载台服{" "}
           </a>

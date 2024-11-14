@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa'
 import { resolve } from 'path'
 import { env } from 'process'
 import faroUploader from '@grafana/faro-rollup-plugin';
-import { faroUploaderCfg } from './src/config/prod'
+import { faroUploaderCfg } from './src/config/build'
 const commitID = env.COMMIT_ID
 const version = commitID?.substring(0, 8)
 const cdnPrefix = `https://k-static.buffge.com:40012/s/hh-lol-prophet/web/${version}`
