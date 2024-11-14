@@ -44,7 +44,6 @@ const DevClient: React.FC = () => {
       // shouldInGameSaveMsgToClipBoard,
       shouldAutoOpenBrowser,
     }
-    console.log("正在更新配置")
     updateConfig(config)
       .then(() => {
         messageApi.info("更新成功", 1)

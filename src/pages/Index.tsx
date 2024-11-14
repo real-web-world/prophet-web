@@ -3,6 +3,7 @@ import { getCurrVersion } from "@/services/lol"
 import { useEffect, useState } from "react"
 // import { Link } from "react-router-dom"
 // import m from "@routes/pathMap"
+import { faro } from "@grafana/faro-web-sdk"
 interface Props {
   version: string
 }
@@ -20,7 +21,7 @@ const Index: React.FC<Props> = () => {
         setDlUrl(data.zipDownloadUrl)
       })
       .catch(e => {
-        console.log(e.msg)
+        faro.api.pushError(e)
       })
   }, [])
   return (

@@ -63,9 +63,6 @@ export async function req<T = unknown>(param: AxiosRequestConfig): Promise<JsonR
         headers,
       })
       .then(resp => {
-        if (!isObject(resp.data)) {
-          return j({ msg: '返回值不是正确的值', data: resp.data })
-        }
         const json = resp.data
         const { code, msg } = json
         if (code !== JsonReturnCode.success) {
@@ -74,15 +71,23 @@ export async function req<T = unknown>(param: AxiosRequestConfig): Promise<JsonR
         return s(json)
       })
       .catch(e => {
-        if (e?.response?.data?.code !== undefined && e?.response?.data?.msg) {
-          j({ msg: e.response.data.msg })
-        } else {
-          j({ msg: `网络请求失败,错误信息: ${e}`, data: e })
-        }
+        j(new BuffError(`网络请求失败,错误信息: ${e}`, e))
       })
   })
 }
-
+class BuffError extends Error {
+  msg: string
+  constructor(msg: string, err?: Error) {
+    super(msg)
+    this.msg = msg
+    if (err) {
+      this.message = err.message
+      this.name = err.name
+      this.stack = err.stack
+      this.cause = err.cause
+    }
+  }
+}
 export async function bget<T = unknown>(param: { url: string; param?: AxiosRequestConfig }) {
   const { url, param: params } = param
   return req<T>({
