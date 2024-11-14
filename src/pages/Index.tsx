@@ -7,9 +7,6 @@ import { faro } from "@grafana/faro-web-sdk"
 interface Props {
   version: string
 }
-const onDownloadApp = () => {
-  faro.api.pushEvent("下载app", {})
-}
 const Index: React.FC<Props> = () => {
   const [versionTag, setVersionTag] = useState(defaultVersionTag)
   const [dlUrl, setDlUrl] = useState(defaultDlUrl)
