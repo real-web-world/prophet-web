@@ -1,24 +1,24 @@
-import { defineConfig } from 'vite'
+import { defineConfig, PluginOption } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
-import { resolve, extname } from 'path'
+import { resolve } from 'path'
 import { env } from 'process'
+import faroUploader from '@grafana/faro-rollup-plugin';
+import { faroUploaderCfg } from './src/config/prod'
 const commitID = env.COMMIT_ID
 const version = commitID?.substring(0, 8)
 const cdnPrefix = `https://k-static.buffge.com:40012/s/hh-lol-prophet/web/${version}`
 // import { analyzer } from 'vite-bundle-analyzer'
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    chunkSizeWarningLimit: 10240,
+  },
   experimental: {
     renderBuiltUrl(filename, { hostId, hostType, type }) {
       if (filename == "index.hmtl") {
         return { runtime: `window.__assetsPath(${JSON.stringify(filename)})` }
       }
-      // if (type === 'public') {
-      //   return 'https://www.domain.com/' + filename
-      // } else if (extname(hostId) === '.js') {
-      //   return { runtime: `window.__assetsPath(${JSON.stringify(filename)})` }
-      // } else {
       return cdnPrefix + "/" + filename
     },
   },
@@ -38,6 +38,15 @@ export default defineConfig({
   },
   plugins: [react(),
   //  analyzer({}),
+  faroUploader({
+    verbose: true,
+    appName: faroUploaderCfg.appName,
+    endpoint: faroUploaderCfg.endpoint,
+    appId: faroUploaderCfg.appId,
+    stackId: faroUploaderCfg.stackId,
+    apiKey: env.VITE_FARO_API_KEY as string,
+    gzipContents: true,
+  }) as PluginOption,
   VitePWA({
     injectRegister: 'inline',
     minify: true,

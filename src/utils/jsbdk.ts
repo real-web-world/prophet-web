@@ -83,7 +83,7 @@ export async function req<T = unknown>(param: AxiosRequestConfig): Promise<JsonR
   })
 }
 
-export async function bget<T = unknown>(param: { url: string; param?: Record<string, any> }) {
+export async function bget<T = unknown>(param: { url: string; param?: AxiosRequestConfig }) {
   const { url, param: params } = param
   return req<T>({
     method: 'GET',

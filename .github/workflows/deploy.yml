@@ -39,13 +39,15 @@ jobs:
              }
           EOF
       - name: build
+        env:
+          VITE_FARO_API_KEY: ${{secrets.VITE_FARO_API_KEY}}
+          VITE_COMMIT_ID: ${{env.COMMIT_ID}}
         run: |
           npm run build
       - name: upload release
         run: |
           export SUB_COMMIT_ID=$(echo "${{env.COMMIT_ID}}"|cut -c 1-8)
           s3cmd sync dist/ s3://buff-pub/hh-lol-prophet/web/${SUB_COMMIT_ID}/
-          ###### End of Repository/Build Configurations ######
       - name: deploy
         run: |
           yarn swa deploy "./dist" --deployment-token=${{secrets.SWA_CLI_DEPLOYMENT_TOKEN}}

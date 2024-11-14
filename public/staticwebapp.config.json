@@ -1,7 +1,5 @@
 {
-  "globalHeaders": {
-    "content-security-policy": "default-src *.buffge.com:* *.gtimg.cn http://127.0.0.1:* 'unsafe-inline' blob:"
-  },
+  "globalHeaders": {},
   "mimeTypes": {
     ".json": "text/json"
   },

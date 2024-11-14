@@ -1,3 +1,4 @@
+import { lolApiBaseUrl } from './../config/prod';
 import { bpost } from './api'
 
 export const champions = [
@@ -24,11 +25,11 @@ export const champions = [
   { id: 20, name: '雪原双子', nicks: ['努努'] },
   { id: 21, name: '赏金猎人', nicks: ['mf', '女枪'] },
   { id: 22, name: '寒冰射手', nicks: ['艾希'] },
-  { id: 23, name: '蛮族之王', nicks: ['蛮王', '三刀'] },
+  { id: 23, name: '蛮族之王', nicks: ['蛮王', '蛮三刀'] },
   { id: 24, name: '武器大师', nicks: ['贾克斯'] },
   { id: 25, name: '堕落天使', nicks: ['莫甘娜'] },
   { id: 26, name: '时光守护者', nicks: ['出生',] },
-  { id: 27, name: '炼金术士', nicks: [] },
+  { id: 27, name: '炼金术士', nicks: ['辛吉德', '辛吉东'] },
   { id: 28, name: '痛苦之拥', nicks: ['寡妇'] },
   { id: 29, name: '瘟疫之源', nicks: ['老鼠'] },
   { id: 30, name: '死亡颂唱者', nicks: ['死歌'] },
@@ -189,6 +190,11 @@ export interface HorseInfo {
   score: number
   currKDA: string[]
 }
+interface VersionInfo {
+  downloadUrl: string
+  versionTag: string
+  zipDownloadUrl: string
+}
 export function getAllConfig() {
   return bpost<Config>({
     url: '/v1/config/getAll',
@@ -209,3 +215,10 @@ export function querySummonerScore(name: string) {
     },
   })
 }
+
+export function getCurrVersion() {
+  return bpost<VersionInfo>({
+    url: `${lolApiBaseUrl}/lol/getCurrVersion`,
+  })
+}
+

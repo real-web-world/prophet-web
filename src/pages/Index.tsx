@@ -1,14 +1,28 @@
-import { bilibiliVideoUrl, projectGhUrl, dlDoamin, projectQQGroup } from "@/config/prod"
+import { bilibiliVideoUrl, projectGhUrl, projectQQGroup, defaultVersionTag, defaultDlUrl } from "@/config/prod"
+import { getCurrVersion } from "@/services/lol"
+import { useEffect, useState } from "react"
 // import { Link } from "react-router-dom"
 // import m from "@routes/pathMap"
 interface Props {
   version: string
 }
 
-const Index: React.FC<Props> = ({ version }) => {
-  const dlUrl = `${dlDoamin}/s/hh-lol-prophet/${version}/hh-lol-prophet-${version}.zip`
-  const maServerDlName = `lol对局先知-${version}.zip`
-  const twServerDlName = `lol对局先知-台服${version}.zip`
+const Index: React.FC<Props> = () => {
+  const [versionTag, setVersionTag] = useState(defaultVersionTag)
+  const [dlUrl, setDlUrl] = useState(defaultDlUrl)
+  const maServerDlName = `lol对局先知-${versionTag}.zip`
+  const twServerDlName = `lol对局先知-台服${versionTag}.zip`
+  useEffect(() => {
+    getCurrVersion()
+      .then(resp => {
+        const { data } = resp
+        setVersionTag(data.versionTag)
+        setDlUrl(data.zipDownloadUrl)
+      })
+      .catch(e => {
+        console.log(e.msg)
+      })
+  }, [])
   return (
     <main>
       <video id="bg-video" autoPlay loop muted>
