@@ -54,20 +54,23 @@ const DevClient: React.FC = () => {
       })
   }
   useEffect(() => {
-    console.log("66 正在初始化")
     ;(async () => {
-      const { data: config } = await getAllConfig()
-      setAutoAccetGame(config.autoAcceptGame)
-      setAutoPickChampID(config.autoPickChampID)
-      setAutoBanChampID(config.autoBanChampID)
-      setAutoSendTeamHorse(config.autoSendTeamHorse)
-      setShouldSendSelfHorse(config.shouldSendSelfHorse)
-      setShouldAutoOpenBrowser(config.shouldAutoOpenBrowser)
-      setHorseNameConf(config.horseNameConf)
-      setChooseSendHorseMsg(config.chooseSendHorseMsg)
-      setAutoPickChampActive(config.autoPickChampID > 0)
-      setAutoBanChampActive(config.autoBanChampID > 0)
-      setHasInit(true)
+      try {
+        const { data: config } = await getAllConfig()
+        setAutoAccetGame(config.autoAcceptGame)
+        setAutoPickChampID(config.autoPickChampID)
+        setAutoBanChampID(config.autoBanChampID)
+        setAutoSendTeamHorse(config.autoSendTeamHorse)
+        setShouldSendSelfHorse(config.shouldSendSelfHorse)
+        setShouldAutoOpenBrowser(config.shouldAutoOpenBrowser)
+        setHorseNameConf(config.horseNameConf)
+        setChooseSendHorseMsg(config.chooseSendHorseMsg)
+        setAutoPickChampActive(config.autoPickChampID > 0)
+        setAutoBanChampActive(config.autoBanChampID > 0)
+        setHasInit(true)
+      } catch (e: any) {
+        messageApi.warning("请检查客户端是否已启动", 3)
+      }
     })()
   }, [])
   useEffect(() => {

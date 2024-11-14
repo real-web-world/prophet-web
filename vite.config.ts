@@ -15,7 +15,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 10240,
   },
   experimental: {
-    renderBuiltUrl(filename, { hostId, hostType, type }) {
+    renderBuiltUrl(filename) {
       if (filename == "index.hmtl") {
         return { runtime: `window.__assetsPath(${JSON.stringify(filename)})` }
       }
