@@ -1,6 +1,8 @@
 import Page404 from "@/pages/common/Page404"
 import DevClient from "@/pages/DevClient"
 import Index from "@/pages/Index"
+import SummerGameHistory from '@/components/gameRecord/SummerGameHistory'
+
 import { type RouteObject, Navigate } from "react-router-dom"
 import m from "./pathMap"
 const routes: RouteObject[] = [
@@ -15,6 +17,10 @@ const routes: RouteObject[] = [
   {
     path: m.dev.client,
     element: <DevClient />,
+  },
+  {
+    path: '/game',
+    element: <SummerGameHistory />,
   },
   {
     path: "*",

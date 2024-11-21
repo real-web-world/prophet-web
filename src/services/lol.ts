@@ -1,6 +1,23 @@
 import { lolApiBaseUrl } from './../config/prod';
 import { bpost } from './api'
-
+export enum GameQueueType {
+  NORMAL = 'NORMAL', // 匹配
+  RANKED_SOLO_5x5 = 'RANKED_SOLO_5x5', //单双排
+  RANKED_FLEX_SR = 'RANKED_FLEX_SR', // 组排
+  ARAM_UNRANKED_5x5 = 'ARAM_UNRANKED_5x5', // 大乱斗
+  URF = 'URF', // 无限火力
+  BOT = 'BOT', // 人机
+  PRACTICETOOL = 'PRACTICETOOL', // 自定义
+}
+export const GameQueueTypeZh: Record<GameQueueType, string> = {
+  [GameQueueType.NORMAL]: '匹配',
+  [GameQueueType.RANKED_SOLO_5x5]: '单双排',
+  [GameQueueType.RANKED_FLEX_SR]: '组排',
+  [GameQueueType.ARAM_UNRANKED_5x5]: '大乱斗',
+  [GameQueueType.URF]: '无限火力',
+  [GameQueueType.BOT]: '人机',
+  [GameQueueType.PRACTICETOOL]: '自定义',
+}
 export const champions = [
   { id: 0, name: '无', nicks: [] },
   { id: 1, name: '黑暗之女', nicks: ['火女', '安妮'] },

@@ -1,0 +1,35 @@
+.history-game:after {
+  right: auto;
+  left: -9px;
+  position: absolute;
+  top: 7px;
+  content: "";
+  width: 0;
+  height: 0;
+  margin-left: 10px;
+  border: 6px solid transparent;
+  border-right: 6px solid rgba(46, 46, 46, .3);
+  font-size: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.report {
+  color: rgb(70, 70, 70);
+  margin: 0 12px;
+  line-height: 24px;
+  font-size: 12px;
+  margin-left: 26px;
+  cursor: 'pointer';
+  text-decoration: none;
+}
+
+.report:hover {
+  color: #359F8D;
+}
+
+.history {
+  .item:hover {
+    // font-size: 12px;
+  }
+}
